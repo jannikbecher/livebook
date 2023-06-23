@@ -1,4 +1,5 @@
 import topbar from "topbar";
+import { globalPubSub } from "./lib/pub_sub";
 
 export function registerTopbar() {
   topbar.config({

@@ -308,6 +308,13 @@ solely client-side operations.
   @apply opacity-10;
 }
 
+[data-el-js-view-iframes] [data-js-focused] {
+  @apply z-50;
+}
+[data-el-js-view-iframes] iframe:not([data-js-focused]) {
+  @apply z-30;
+}
+
 [data-el-session][data-js-view="presentation"] [data-el-sidebar],
 [data-el-session][data-js-view="presentation"] [data-el-side-panel],
 [data-el-session][data-js-view="presentation"] [data-el-toggle-sidebar] {

@@ -15,6 +15,8 @@ import { globalPubSub } from "../lib/pub_sub";
 import monaco from "./cell_editor/live_editor/monaco";
 import { leaveChannel } from "./js_view/channel";
 import { isDirectlyEditable, isEvaluable } from "../lib/notebook";
+import "winbox/dist/css/winbox.min.css";
+import WinBox from "winbox/src/js/winbox.js";
 
 /**
  * A hook managing the whole session.
@@ -121,9 +123,10 @@ const Session = {
       this.toggleAppInfo()
     );
 
-    this.getElement("notebook").addEventListener("scroll", (event) =>
-      this.updateSectionListHighlight()
-    );
+    this.getElement("notebook").addEventListener("scroll", (event) => {
+      this.updateSectionListHighlight();
+      globalPubSub.broadcast("js_views", { type: "reposition" });
+    });
 
     this.getElement("notebook-indicators").addEventListener("click", (event) =>
       this.handleCellIndicatorsClick(event)
@@ -137,6 +140,33 @@ const Session = {
       "click",
       (event) => this.toggleCollapseAllSections()
     );
+
+    window.addEventListener("lb:winbox", (event) => {
+      let node = event.target;
+
+      const winbox = new WinBox("iframe", {
+        mount: node,
+        height: node.firstElementChild.offsetHeight * 1.2,
+        index: 40,
+        class: ["z-40"],
+        onmove: (_x, _y) => globalPubSub.broadcast("js_views", { type: "reposition" }),
+        onresize: (_x, _y) => globalPubSub.broadcast("js_views", { type: "reposition" }),
+        onfocus: function() {
+          this.setBackground("#435");
+          this.dom.classList.add("z-40");
+          this.dom.classList.remove("z-30");
+          globalPubSub.broadcast("navigation", { type: "element_focused" });
+        },
+
+        onblur: function() {
+          this.setBackground("#642");
+          this.dom.classList.add("z-30");
+          this.dom.classList.remove("z-40");
+        }
+      });
+      console.log(winbox);
+      document.getElementById("winbox-backstore").appendChild(winbox.dom);
+    });
 
     window.addEventListener(
       "phx:page-loading-stop",

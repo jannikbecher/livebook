@@ -39,7 +39,8 @@
     "topbar": "^2.0.1",
     "unified": "^10.1.0",
     "unist-util-remove-position": "^4.0.1",
-    "unist-util-visit": "^4.0.0"
+    "unist-util-visit": "^4.0.0",
+    "winbox": "^0.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.22.1",

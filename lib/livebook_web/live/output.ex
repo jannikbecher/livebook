@@ -82,13 +82,26 @@ defmodule LivebookWeb.Output do
   end
 
   defp render_output({:js, js_info}, %{id: id, session_id: session_id, client_id: client_id}) do
-    live_component(LivebookWeb.JSViewComponent,
-      id: id,
-      js_view: js_info.js_view,
-      session_id: session_id,
-      client_id: client_id,
-      timeout_message: "Output data no longer available, please reevaluate this cell"
-    )
+    assigns = %{}
+    ~H"""
+    <div>
+      <button
+        class="icon-button bg-gray-100"
+        data-el-clipcopy
+        phx-click={JS.dispatch("lb:winbox", to: "#js-output-#{id}-#{js_info.js_view.ref}")}
+      >
+        <.remix_icon icon="external-link-fill" class="text-lg" />
+      </button>
+      <.live_component
+        module={LivebookWeb.JSViewComponent}
+        id={id}
+        js_view={js_info.js_view}
+        session_id={session_id}
+        client_id={client_id}
+        timeout_message="Output data no longer available, please reevaluate this cell"
+      />
+    </div>
+    """
   end
 
   defp render_output({:frame, outputs, _info}, %{

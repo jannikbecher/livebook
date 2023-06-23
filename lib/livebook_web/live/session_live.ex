@@ -232,6 +232,7 @@ defmodule LivebookWeb.SessionLive do
       </div>
       <div class="grow overflow-y-auto relative" data-el-notebook>
         <div data-el-js-view-iframes phx-update="ignore" id="js-view-iframes"></div>
+        <div phx-update="ignore" id="winbox-backstore"></div>
         <LivebookWeb.SessionLive.IndicatorsComponent.render
           session_id={@session.id}
           file={@data_view.file}
